@@ -1,0 +1,190 @@
+{
+  "overall_metrics": {
+    "total_trades": 156,
+    "win_rate": 0.67,
+    "total_roi": 28.4,
+    "sharpe_ratio": 1.85,
+    "max_drawdown": -12.3,
+    "avg_hold_time": 8.5,
+    "winning_trades": 104,
+    "losing_trades": 52
+  },
+  "category_performance": [
+    {
+      "category": "Politics",
+      "total_trades": 42,
+      "win_rate": 0.71,
+      "avg_roi": 8.2,
+      "total_pnl": 15400,
+      "confidence_accuracy": 0.78,
+      "best_trade": { "market": "Trump Win 2024", "roi": 45.2 },
+      "worst_trade": { "market": "Fed Cut July", "roi": -8.5 }
+    },
+    {
+      "category": "Crypto",
+      "total_trades": 58,
+      "win_rate": 0.64,
+      "avg_roi": 6.8,
+      "total_pnl": 18900,
+      "confidence_accuracy": 0.71,
+      "best_trade": { "market": "ETH ETF Approved", "roi": 38.5 },
+      "worst_trade": { "market": "XRP $10 2024", "roi": -12.3 }
+    },
+    {
+      "category": "Sports",
+      "total_trades": 35,
+      "win_rate": 0.69,
+      "avg_roi": 7.1,
+      "total_pnl": 8900,
+      "confidence_accuracy": 0.74,
+      "best_trade": { "market": "Chiefs Super Bowl", "roi": 28.8 },
+      "worst_trade": { "market": "Lakers Playoffs", "roi": -6.2 }
+    },
+    {
+      "category": "Culture",
+      "total_trades": 21,
+      "win_rate": 0.62,
+      "avg_roi": 5.4,
+      "total_pnl": 4200,
+      "confidence_accuracy": 0.68,
+      "best_trade": { "market": "Taylor Swift Album", "roi": 22.1 },
+      "worst_trade": { "market": "Oppenheimer Sequel", "roi": -4.8 }
+    }
+  ],
+  "confidence_buckets": [
+    {
+      "confidence_range": "90-100%",
+      "trades": 18,
+      "win_rate": 0.89,
+      "avg_roi": 15.2,
+      "total_pnl": 8900
+    },
+    {
+      "confidence_range": "80-89%",
+      "trades": 32,
+      "win_rate": 0.78,
+      "avg_roi": 11.4,
+      "total_pnl": 12300
+    },
+    {
+      "confidence_range": "70-79%",
+      "trades": 45,
+      "win_rate": 0.68,
+      "avg_roi": 7.8,
+      "total_pnl": 14500
+    },
+    {
+      "confidence_range": "60-69%",
+      "trades": 38,
+      "win_rate": 0.58,
+      "avg_roi": 4.2,
+      "total_pnl": 7200
+    },
+    {
+      "confidence_range": "50-59%",
+      "trades": 23,
+      "win_rate": 0.43,
+      "avg_roi": -1.2,
+      "total_pnl": -1500
+    }
+  ],
+  "entry_timing_analysis": [
+    {
+      "timing_label": "Early (<30s)",
+      "trades": 45,
+      "win_rate": 0.71,
+      "avg_roi": 8.4,
+      "edge_decay": -0.8
+    },
+    {
+      "timing_label": "Optimal (30-120s)",
+      "trades": 68,
+      "win_rate": 0.74,
+      "avg_roi": 9.2,
+      "edge_decay": 0
+    },
+    {
+      "timing_label": "Late (120-300s)",
+      "trades": 32,
+      "win_rate": 0.56,
+      "avg_roi": 3.1,
+      "edge_decay": -3.5
+    },
+    {
+      "timing_label": "Very Late (>300s)",
+      "trades": 11,
+      "win_rate": 0.36,
+      "avg_roi": -2.8,
+      "edge_decay": -6.2
+    }
+  ],
+  "capital_curve": [
+    { "date": "2024-01-01", "value": 10000, "pnl_pct": 0 },
+    { "date": "2024-01-15", "value": 10500, "pnl_pct": 5.0 },
+    { "date": "2024-02-01", "value": 10800, "pnl_pct": 8.0 },
+    { "date": "2024-02-15", "value": 10200, "pnl_pct": 2.0 },
+    { "date": "2024-03-01", "value": 11500, "pnl_pct": 15.0 },
+    { "date": "2024-03-15", "value": 12100, "pnl_pct": 21.0 },
+    { "date": "2024-04-01", "value": 11800, "pnl_pct": 18.0 },
+    { "date": "2024-04-15", "value": 12600, "pnl_pct": 26.0 },
+    { "date": "2024-05-01", "value": 13100, "pnl_pct": 31.0 },
+    { "date": "2024-05-15", "value": 12840, "pnl_pct": 28.4 }
+  ],
+  "most_profitable_predictions": [
+    {
+      "rank": 1,
+      "market": "ETH ETF Approval 2024",
+      "category": "Crypto",
+      "entry_price": 0.58,
+      "exit_price": 0.92,
+      "roi": 58.6,
+      "hold_time": 12,
+      "confidence": 0.82,
+      "outcome": "WIN"
+    },
+    {
+      "rank": 2,
+      "market": "Trump Win 2024",
+      "category": "Politics",
+      "entry_price": 0.45,
+      "exit_price": 0.68,
+      "roi": 51.1,
+      "hold_time": 8,
+      "confidence": 0.78,
+      "outcome": "WIN"
+    },
+    {
+      "rank": 3,
+      "market": "Chiefs Super Bowl 2025",
+      "category": "Sports",
+      "entry_price": 0.18,
+      "exit_price": 0.26,
+      "roi": 44.4,
+      "hold_time": 45,
+      "confidence": 0.71,
+      "outcome": "WIN"
+    },
+    {
+      "rank": 4,
+      "market": "Fed Rate Cut September",
+      "category": "Politics",
+      "entry_price": 0.28,
+      "exit_price": 0.40,
+      "roi": 42.9,
+      "hold_time": 18,
+      "confidence": 0.69,
+      "outcome": "WIN"
+    },
+    {
+      "rank": 5,
+      "market": "BTC > $100k 2024",
+      "category": "Crypto",
+      "entry_price": 0.35,
+      "exit_price": 0.48,
+      "roi": 37.1,
+      "hold_time": 24,
+      "confidence": 0.65,
+      "outcome": "WIN"
+    }
+  ]
+}

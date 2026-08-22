@@ -1,0 +1,82 @@
+{
+  "BTC": {
+    "current": 90225.56,
+    "change1h": -0.16,
+    "change24h": -0.22,
+    "change7d": -2.93,
+    "volume24h": "67,451,818,041",
+    "marketCap": "1,800,000,000,000",
+    "candles": [
+      { "time": "09:00", "open": 90800, "high": 91200, "low": 90400, "close": 90950, "volume": 45200000 },
+      { "time": "09:15", "open": 90950, "high": 91100, "low": 90600, "close": 90700, "volume": 38900000 },
+      { "time": "09:30", "open": 90700, "high": 90950, "low": 90300, "close": 90450, "volume": 52000000 },
+      { "time": "09:45", "open": 90450, "high": 90700, "low": 90100, "close": 90250, "volume": 47800000 },
+      { "time": "10:00", "open": 90250, "high": 90500, "low": 89900, "close": 90350, "volume": 41200000 },
+      { "time": "10:15", "open": 90350, "high": 90700, "low": 90200, "close": 90550, "volume": 35600000 },
+      { "time": "10:30", "open": 90550, "high": 90900, "low": 90400, "close": 90750, "volume": 49800000 },
+      { "time": "10:45", "open": 90750, "high": 91050, "low": 90600, "close": 90900, "volume": 44500000 },
+      { "time": "11:00", "open": 90900, "high": 91200, "low": 90750, "close": 91050, "volume": 52300000 },
+      { "time": "11:15", "open": 91050, "high": 91350, "low": 90850, "close": 90225, "volume": 58700000 }
+    ]
+  },
+  "ETH": {
+    "current": 3191.90,
+    "change1h": 0.12,
+    "change24h": -3.67,
+    "change7d": 0.02,
+    "volume24h": "33,506,403,272",
+    "marketCap": "385,263,249,574",
+    "candles": [
+      { "time": "09:00", "open": 3220, "high": 3250, "low": 3190, "close": 3235, "volume": 28500000 },
+      { "time": "09:15", "open": 3235, "high": 3265, "low": 3215, "close": 3245, "volume": 24800000 },
+      { "time": "09:30", "open": 3245, "high": 3270, "low": 3220, "close": 3230, "volume": 31200000 },
+      { "time": "09:45", "open": 3230, "high": 3255, "low": 3195, "close": 3205, "volume": 29500000 },
+      { "time": "10:00", "open": 3205, "high": 3230, "low": 3175, "close": 3195, "volume": 26800000 },
+      { "time": "10:15", "open": 3195, "high": 3225, "low": 3180, "close": 3205, "volume": 22400000 },
+      { "time": "10:30", "open": 3205, "high": 3240, "low": 3195, "close": 3225, "volume": 30500000 },
+      { "time": "10:45", "open": 3225, "high": 3260, "low": 3210, "close": 3240, "volume": 28900000 },
+      { "time": "11:00", "open": 3240, "high": 3280, "low": 3225, "close": 3265, "volume": 35600000 },
+      { "time": "11:15", "open": 3265, "high": 3290, "low": 3185, "close": 3191, "volume": 41200000 }
+    ]
+  },
+  "SOL": {
+    "current": 131.00,
+    "change1h": -0.03,
+    "change24h": 4.47,
+    "change7d": -2.80,
+    "volume24h": "6,430,415,391",
+    "marketCap": "73,595,540,392",
+    "candles": [
+      { "time": "09:00", "open": 130.5, "high": 133.0, "low": 129.5, "close": 132.0, "volume": 5200000 },
+      { "time": "09:15", "open": 132.0, "high": 134.5, "low": 131.0, "close": 133.5, "volume": 4850000 },
+      { "time": "09:30", "open": 133.5, "high": 135.0, "low": 132.5, "close": 134.0, "volume": 6120000 },
+      { "time": "09:45", "open": 134.0, "high": 135.5, "low": 132.0, "close": 132.5, "volume": 5580000 },
+      { "time": "10:00", "open": 132.5, "high": 134.0, "low": 131.0, "close": 131.5, "volume": 4780000 },
+      { "time": "10:15", "open": 131.5, "high": 133.0, "low": 130.5, "close": 132.0, "volume": 4120000 },
+      { "time": "10:30", "open": 132.0, "high": 134.5, "low": 131.5, "close": 133.5, "volume": 5680000 },
+      { "time": "10:45", "open": 133.5, "high": 135.0, "low": 132.0, "close": 132.5, "volume": 5250000 },
+      { "time": "11:00", "open": 132.5, "high": 134.0, "low": 131.0, "close": 130.5, "volume": 6450000 },
+      { "time": "11:15", "open": 130.5, "high": 132.5, "low": 129.5, "close": 131.0, "volume": 5890000 }
+    ]
+  },
+  "XRP": {
+    "current": 2.00,
+    "change1h": 0.05,
+    "change24h": -0.64,
+    "change7d": 1.25,
+    "volume24h": "2,156,000,000",
+    "marketCap": "121,000,000,000",
+    "candles": [
+      { "time": "09:00", "open": 2.02, "high": 2.05, "low": 2.00, "close": 2.03, "volume": 185000000 },
+      { "time": "09:15", "open": 2.03, "high": 2.06, "low": 2.01, "close": 2.04, "volume": 168000000 },
+      { "time": "09:30", "open": 2.04, "high": 2.07, "low": 2.02, "close": 2.05, "volume": 225000000 },
+      { "time": "09:45", "open": 2.05, "high": 2.08, "low": 2.03, "close": 2.06, "volume": 198000000 },
+      { "time": "10:00", "open": 2.06, "high": 2.09, "low": 2.04, "close": 2.07, "volume": 156000000 },
+      { "time": "10:15", "open": 2.07, "high": 2.10, "low": 2.05, "close": 2.08, "volume": 142000000 },
+      { "time": "10:30", "open": 2.08, "high": 2.11, "low": 2.06, "close": 2.09, "volume": 212000000 },
+      { "time": "10:45", "open": 2.09, "high": 2.12, "low": 2.07, "close": 2.08, "volume": 195000000 },
+      { "time": "11:00", "open": 2.08, "high": 2.11, "low": 2.05, "close": 2.06, "volume": 245000000 },
+      { "time": "11:15", "open": 2.06, "high": 2.09, "low": 1.98, "close": 2.00, "volume": 285000000 }
+    ]
+  }
+}
