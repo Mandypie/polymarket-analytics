@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PolyMarket Analytics - Platform Architecture</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --accent-primary: #10b981;
+  --accent-secondary: #8b5cf6;
+  --accent-tertiary: #f59e0b;
+  --surface-light: #ffffff;
+  --surface-dark: #1f2937;
+  --border-light: #e5e7eb;
+  --border-dark: #374151;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  min-height: 100vh;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.data-flow-line {
+  stroke-dasharray: 8;
+  animation: dash 1s linear infinite;
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -16; }
+}
+
+.pulse-dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.schema-live { fill: #10b981; }
+.schema-mock { fill: #8b5cf6; }
+.schema-resolved { fill: #f59e0b; }
+</style>
+</head>
+<body class="text-gray-100">
+<div class="max-w-7xl mx-auto px-6 py-12">
+
+<!-- Header -->
+<header class="text-center mb-16">
+  <div class="inline-flex items-center gap-3 mb-4">
+    <span class="text-4xl">📊</span>
+    <h1 class="text-5xl font-bold bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+      PolyMarket Analytics Platform
+    </h1>
+  </div>
+  <p class="text-xl text-gray-400">Architecture & Implementation Roadmap</p>
+  <div class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-500/30">
+    <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+    <span class="text-emerald-300 text-sm">Live Demo Running: http://localhost:5173/</span>
+  </div>
+</header>
+
+<!-- Architecture Diagram -->
+<section class="mb-16">
+  <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+    <span>🏗️</span> Three-Tier Data Architecture
+  </h2>
+
+  <div class="glass-card p-8">
+    <svg viewBox="0 0 1000 600" class="w-full h-auto">
+      <!-- Background Layers -->
+      <defs>
+        <linearGradient id="liveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.2" />
+          <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.05" />
+        </linearGradient>
+        <linearGradient id="mockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.2" />
+          <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.05" />
+        </linearGradient>
+        <linearGradient id="resolvedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.2" />
+          <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.05" />
+        </linearGradient>
+      </defs>
+
+      <!-- Live Data Layer -->
+      <rect x="50" y="50" width="250" height="120" rx="12" fill="url(#liveGrad)" stroke="#10b981" stroke-width="2"/>
+      <text x="175" y="85" text-anchor="middle" fill="#10b981" font-weight="600" font-size="14">LIVE DATA</text>
+      <text x="175" y="105" text-anchor="middle" fill="#9ca3af" font-size="11">Gamma API + CLOB</text>
+      <text x="175" y="125" text-anchor="middle" fill="#9ca3af" font-size="11">Real-time markets</text>
+      <text x="175" y="145" text-anchor="middle" fill="#9ca3af" font-size="11">WebSocket feeds</text>
+
+      <!-- Mock Data Layer -->
+      <rect x="375" y="50" width="250" height="120" rx="12" fill="url(#mockGrad)" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="500" y="85" text-anchor="middle" fill="#8b5cf6" font-weight="600" font-size="14">MOCK DATA</text>
+      <text x="500" y="105" text-anchor="middle" fill="#9ca3af" font-size="11">Synthetic markets</text>
+      <text x="500" y="125" text-anchor="middle" fill="#9ca3af" font-size="11">Test strategies</text>
+      <text x="500" y="145" text-anchor="middle" fill="#9ca3af" font-size="11">Backtesting sims</text>
+
+      <!-- Resolved Data Layer -->
+      <rect x="700" y="50" width="250" height="120" rx="12" fill="url(#resolvedGrad)" stroke="#f59e0b" stroke-width="2"/>
+      <text x="825" y="85" text-anchor="middle" fill="#f59e0b" font-weight="600" font-size="14">RESOLVED HISTORY</text>
+      <text x="825" y="105" text-anchor="middle" fill="#9ca3af" font-size="11">Settled markets</text>
+      <text x="825" y="125" text-anchor="middle" fill="#9ca3af" font-size="11">Historical outcomes</text>
+      <text x="825" y="145" text-anchor="middle" fill="#9ca3af" font-size="11">Performance truth</text>
+
+      <!-- Flow Lines to Database -->
+      <line x1="175" y1="170" x2="400" y2="230" stroke="#10b981" stroke-width="2" class="data-flow-line"/>
+      <line x1="500" y1="170" x2="500" y2="230" stroke="#8b5cf6" stroke-width="2" class="data-flow-line"/>
+      <line x1="825" y1="170" x2="600" y2="230" stroke="#f59e0b" stroke-width="2" class="data-flow-line"/>
+
+      <!-- Database Layer -->
+      <rect x="300" y="230" width="400" height="100" rx="12" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6" stroke-width="2"/>
+      <text x="500" y="265" text-anchor="middle" fill="#3b82f6" font-weight="600" font-size="14">POSTGRESQL + TIMESCALEDB</text>
+      <text x="500" y="285" text-anchor="middle" fill="#9ca3af" font-size="11">Separate Hypertables per Schema</text>
+      <text x="500" y="305" text-anchor="middle" fill="#9ca3af" font-size="11">Time-series optimization</text>
+
+      <!-- Flow Line to Analytics -->
+      <line x1="500" y1="330" x2="500" y2="380" stroke="#3b82f6" stroke-width="2" class="data-flow-line"/>
+
+      <!-- Analytics Layer -->
+      <rect x="300" y="380" width="400" height="120" rx="12" fill="rgba(236, 72, 153, 0.1)" stroke="#ec4899" stroke-width="2"/>
+      <text x="500" y="415" text-anchor="middle" fill="#ec4899" font-weight="600" font-size="14">ANALYTICS ENGINE</text>
+      <text x="500" y="435" text-anchor="middle" fill="#9ca3af" font-size="11">ROI Calculator • Winrate Engine</text>
+      <text x="500" y="455" text-anchor="middle" fill="#9ca3af" font-size="11">Kelly Sizing • Volume Analysis</text>
+      <text x="500" y="475" text-anchor="middle" fill="#9ca3af" font-size="11">Edge Detection • Liquidity Metrics</text>
+
+      <!-- Flow Line to Dashboard -->
+      <line x1="500" y1="500" x2="500" y2="530" stroke="#ec4899" stroke-width="2" class="data-flow-line"/>
+
+      <!-- Dashboard Layer -->
+      <rect x="250" y="530" width="500" height="60" rx="12" fill="rgba(251, 146, 60, 0.1)" stroke="#fb923c" stroke-width="2"/>
+      <text x="500" y="565" text-anchor="middle" fill="#fb923c" font-weight="600" font-size="14">DASHBOARD • Politics | Sports | Crypto | Culture</text>
+    </svg>
+  </div>
+</section>
+
+<!-- Implementation Status -->
+<section class="mb-16">
+  <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+    <span>✅</span> Current Implementation Status
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="glass-card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-emerald-400 font-semibold">Live Dashboard</span>
+        <span class="text-emerald-400 text-sm">✓ Complete</span>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-400">
+        <li>• React + Vite + Tailwind CSS</li>
+        <li>• Real-time WebSocket feeds</li>
+        <li>• Signal engine with confidence calibration</li>
+        <li>• Liquidity heatmap visualization</li>
+        <li>• Orderbook depth display</li>
+      </ul>
+    </div>
+
+    <div class="glass-card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-amber-400 font-semibold">Database Layer</span>
+        <span class="text-amber-400 text-sm">→ To Build</span>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-400">
+        <li>• PostgreSQL + TimescaleDB setup</li>
+        <li>• Schema separation (Live/Mock/Resolved)</li>
+        <li>• Hypertable time-series optimization</li>
+        <li>• Async ingestion pipeline</li>
+        <li>• Data retention policies</li>
+      </ul>
+    </div>
+
+    <div class="glass-card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-purple-400 font-semibold">Analytics Engine</span>
+        <span class="text-purple-400 text-sm">→ To Build</span>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-400">
+        <li>• Python FastAPI backend</li>
+        <li>• ROI calculator per category</li>
+        <li>• Winrate aggregation engine</li>
+        <li>• Kelly sizing calculator</li>
+        <li>• "Most Profitable" ranking</li>
+      </ul>
+    </div>
+
+    <div class="glass-card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-cyan-400 font-semibold">Backtesting Module</span>
+        <span class="text-cyan-400 text-sm">→ To Build</span>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-400">
+        <li>• Mock strategy simulation</li>
+        <li>• Historical validation</li>
+        <li>• Edge decay analysis</li>
+        <li>• Regime filtering</li>
+        <li>• Performance attribution</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Stack Comparison -->
+<section class="mb-16">
+  <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+    <span>🔄</span> Tech Stack Evolution
+  </h2>
+
+  <div class="glass-card overflow-hidden">
+    <table class="w-full">
+      <thead>
+        <tr class="border-b border-white/10">
+          <th class="text-left p-4 text-gray-400">Component</th>
+          <th class="text-left p-4 text-emerald-400">Current</th>
+          <th class="text-left p-4 text-purple-400">Target</th>
+        </tr>
+      </thead>
+      <tbody class="text-sm">
+        <tr class="border-b border-white/5">
+          <td class="p-4 font-medium">Backend API</td>
+          <td class="p-4 text-gray-400">In-memory state</td>
+          <td class="p-4 text-purple-300">Python FastAPI</td>
+        </tr>
+        <tr class="border-b border-white/5">
+          <td class="p-4 font-medium">Database</td>
+          <td class="p-4 text-gray-400">Client-side arrays</td>
+          <td class="p-4 text-purple-300">PostgreSQL + TimescaleDB</td>
+        </tr>
+        <tr class="border-b border-white/5">
+          <td class="p-4 font-medium">WebSocket</td>
+          <td class="p-4 text-gray-400">Binance feed only</td>
+          <td class="p-4 text-purple-300">Polymarket CLOB integration</td>
+        </tr>
+        <tr class="border-b border-white/5">
+          <td class="p-4 font-medium">Analytics</td>
+          <td class="p-4 text-gray-400">Basic signal engine</td>
+          <td class="p-4 text-purple-300">Full ROI/Winrate/Kelly engine</td>
+        </tr>
+        <tr class="border-b border-white/5">
+          <td class="p-4 font-medium">Dashboard</td>
+          <td class="p-4 text-emerald-300">React + Vite + Tailwind</td>
+          <td class="p-4 text-purple-300">Next.js or Streamlit</td>
+        </tr>
+        <tr>
+          <td class="p-4 font-medium">Deployment</td>
+          <td class="p-4 text-gray-400">Local development</td>
+          <td class="p-4 text-purple-300">Docker + Cloud hosting</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Implementation Roadmap -->
+<section class="mb-16">
+  <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+    <span>🗓️</span> Implementation Roadmap
+  </h2>
+
+  <div class="space-y-4">
+    <!-- Week 1-2 -->
+    <div class="glass-card p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">1-2</div>
+        <div>
+          <h3 class="font-semibold text-white">Data Pipeline Foundation</h3>
+          <p class="text-sm text-gray-400">Core infrastructure & ingestion</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">FastAPI WebSocket Server</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">TimescaleDB Setup</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Schema Separation</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Async Ingestion</div>
+      </div>
+    </div>
+
+    <!-- Week 3-4 -->
+    <div class="glass-card p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">3-4</div>
+        <div>
+          <h3 class="font-semibold text-white">Analytics Engine</h3>
+          <p class="text-sm text-gray-400">Core metrics & calculations</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">ROI Calculator</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Winrate Engine</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Volume Metrics</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Profitability Ranking</div>
+      </div>
+    </div>
+
+    <!-- Week 5-6 -->
+    <div class="glass-card p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold">5-6</div>
+        <div>
+          <h3 class="font-semibold text-white">Dashboard & Integration</h3>
+          <p class="text-sm text-gray-400">User interface & data visualization</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Category Filters</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Live/Mock/Resolved Tabs</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Charts & Export</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">API Integration</div>
+      </div>
+    </div>
+
+    <!-- Week 7-8 -->
+    <div class="glass-card p-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">7-8</div>
+        <div>
+          <h3 class="font-semibold text-white">Backtesting & Production</h3>
+          <p class="text-sm text-gray-400">Simulation & deployment</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Strategy Simulation</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Historical Validation</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Docker Deployment</div>
+        <div class="px-3 py-2 rounded-lg bg-white/5 text-gray-300">Monitoring & Alerts</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Category Analytics Preview -->
+<section class="mb-16">
+  <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+    <span>📊</span> Category Analytics Preview
+  </h2>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="glass-card p-6 text-center">
+      <div class="text-3xl mb-2">🏛️</div>
+      <h3 class="font-semibold text-white mb-1">Politics</h3>
+      <p class="text-xs text-gray-400">Elections • Policy • Regulation</p>
+    </div>
+    <div class="glass-card p-6 text-center">
+      <div class="text-3xl mb-2">⚽</div>
+      <h3 class="font-semibold text-white mb-1">Sports</h3>
+      <p class="text-xs text-gray-400">Games • Tournaments • Outcomes</p>
+    </div>
+    <div class="glass-card p-6 text-center">
+      <div class="text-3xl mb-2">₿</div>
+      <h3 class="font-semibold text-white mb-1">Crypto</h3>
+      <p class="text-xs text-gray-400">Prices • Events • Trends</p>
+    </div>
+    <div class="glass-card p-6 text-center">
+      <div class="text-3xl mb-2">🎬</div>
+      <h3 class="font-semibold text-white mb-1">Culture</h3>
+      <p class="text-xs text-gray-400">Entertainment • Awards • Viral</p>
+    </div>
+  </div>
+</section>
+
+<!-- Hiring Info -->
+<section class="mb-16">
+  <div class="glass-card p-8 text-center">
+    <h2 class="text-2xl font-semibold mb-4">🎯 Hiring: Senior Python/TS Developer</h2>
+    <p class="text-gray-400 mb-6">Turn this working prototype into a production analytics platform</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
+      <div>
+        <h3 class="font-semibold text-emerald-400 mb-2">Option A: Full Product</h3>
+        <p class="text-sm text-gray-400">6 weeks • Complete platform with all features</p>
+      </div>
+      <div>
+        <h3 class="font-semibold text-purple-400 mb-2">Option B: MVP</h3>
+        <p class="text-sm text-gray-400">3 weeks • Streamlit dashboard + core analytics</p>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-white/10">
+      <p class="text-sm text-gray-400">
+        GitHub: <a href="https://github.com/DreamOfTrading/PolyMarket-Extractor" class="text-cyan-400 hover:underline">DreamOfTrading/PolyMarket-Extractor</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center text-gray-500 text-sm pb-8">
+  <p>PolyMarket Analytics Platform • Architecture Demo</p>
+  <p class="mt-2">Dashboard running at <span class="text-emerald-400">http://localhost:5173/</span></p>
+</footer>
+
+</div>
+
+<script>
+// Animate data flow lines
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('PolyMarket Analytics Architecture Demo Loaded');
+});
+</script>
+</body>
+</html>
