@@ -1,0 +1,18 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "main",
+    "origin",
+    "python-backend"
+  ],
+  "parent": {
+    "main": null,
+    "origin": "main",
+    "python-backend": "main"
+  },
+  "order": [
+    "main",
+    "origin",
+    "python-backend"
+  ]
+}

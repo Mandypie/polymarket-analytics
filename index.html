@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymarket Analytics Platform - Live Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0e1117;
+            color: #fafafa;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2rem;
+        }
+
+        .demo-banner {
+            background: #1a4d2e;
+            border: 2px solid #2d5a3d;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .demo-banner .emoji {
+            font-size: 2rem;
+        }
+
+        .demo-banner .text {
+            flex: 1;
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: #1a1d24;
+            border-radius: 12px;
+            padding: 25px;
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fafafa;
+            font-size: 1.1rem;
+        }
+
+        .filter-group {
+            margin-bottom: 25px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #3a3f4b;
+            border-radius: 8px;
+            background: #0e1117;
+            color: #fafafa;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .health-status {
+            background: #1a4d2e;
+            border: 1px solid #2d5a3d;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .health-status .emoji {
+            font-size: 1.5rem;
+        }
+
+        .health-status .text {
+            color: #4ade80;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .main-content {
+            background: #1a1d24;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            background: #0e1117;
+            border-bottom: 2px solid #3a3f4b;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 18px 24px;
+            background: transparent;
+            border: none;
+            color: #a0aec0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: #fafafa;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab.active {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.15);
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #fafafa;
+        }
+
+        .section-header p {
+            color: #a0aec0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: #0e1117;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #1a1d24;
+        }
+
+        .metric-card .label {
+            color: #a0aec0;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .metric-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .markets-list {
+            margin-top: 25px;
+        }
+
+        .markets-list h3 {
+            color: #fafafa;
+            margin-bottom: 15px;
+        }
+
+        .market-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            background: #0e1117;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .market-info .question {
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 5px;
+        }
+
+        .market-info .category {
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+
+        .market-metric {
+            background: #1a1d24;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .market-metric .metric-label {
+            color: #a0aec0;
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+        }
+
+        .market-metric .metric-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fafafa;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge-politics { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+        .badge-crypto { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .badge-sports { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+        .badge-culture { background: rgba(192, 132, 252, 0.2); color: #c084fc; }
+
+        .export-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: transform 0.2s;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: #1a4d2e;
+            border: 1px solid #2d5a3d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            color: #4ade80;
+        }
+
+        .divider {
+            height: 1px;
+            background: #3a3f4b;
+            margin: 25px 0;
+        }
+
+        .footer {
+            text-align: center;
+            color: #718096;
+            padding: 30px 20px;
+            margin-top: 30px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .market-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Polymarket Analytics Platform</h1>
+            <p>Real-time analytics and insights for Polymarket prediction markets</p>
+        </div>
+
+        <div class="demo-banner">
+            <div class="emoji">🎯</div>
+            <div class="text">DEMO MODE - Running with mock data (no database required)</div>
+        </div>
+
+        <div class="layout">
+            <aside class="sidebar">
+                <div class="sidebar-title">Filters</div>
+
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="politics">Politics</option>
+                        <option value="crypto">Crypto</option>
+                        <option value="sports">Sports</option>
+                        <option value="culture">Culture</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Markets per page</label>
+                    <select id="limitFilter">
+                        <option value="10">10 markets</option>
+                        <option value="25">25 markets</option>
+                        <option value="50">50 markets</option>
+                        <option value="100">100 markets</option>
+                    </select>
+                </div>
+
+                <div class="health-status">
+                    <div class="emoji">✅</div>
+                    <div class="text">System Healthy</div>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="tabs">
+                    <button class="tab active" data-tab="live">📈 Live Markets</button>
+                    <button class="tab" data-tab="mock">🧪 Mock Data</button>
+                    <button class="tab" data-tab="resolved">✅ Resolved Results</button>
+                    <button class="tab" data-tab="analytics">📊 Analytics</button>
+                </div>
+
+                <div id="live" class="tab-content active">
+                    <div class="section-header">
+                        <h2>Live Markets</h2>
+                        <p>Real-time market data from Polymarket Gamma API</p>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="label">Total Markets</div>
+                            <div class="value">10</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">Avg Liquidity</div>
+                            <div class="value">$845K</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">Total Volume</div>
+                            <div class="value">$12.3M</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">Tight Spreads</div>
+                            <div class="value">6</div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="markets-list">
+                        <h3>Markets (10)</h3>
+
+                        <div class="market-row" data-category="crypto">
+                            <div class="market-info">
+                                <div class="question">Will Bitcoin exceed $100K by 2026?</div>
+                                <div class="category">Category: <span class="category-badge badge-crypto">Crypto</span></div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">YES</div>
+                                <div class="metric-value">65%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">NO</div>
+                                <div class="metric-value">35%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Volume</div>
+                                <div class="metric-value">$2.4M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Liquidity</div>
+                                <div class="metric-value">$1.2M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Spread</div>
+                                <div class="metric-value">2.0%</div>
+                            </div>
+                        </div>
+
+                        <div class="market-row" data-category="politics">
+                            <div class="market-info">
+                                <div class="question">Republicans win House majority in 2026?</div>
+                                <div class="category">Category: <span class="category-badge badge-politics">Politics</span></div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">YES</div>
+                                <div class="metric-value">52%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">NO</div>
+                                <div class="metric-value">48%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Volume</div>
+                                <div class="metric-value">$3.8M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Liquidity</div>
+                                <div class="metric-value">$2.1M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Spread</div>
+                                <div class="metric-value">1.5%</div>
+                            </div>
+                        </div>
+
+                        <div class="market-row" data-category="crypto">
+                            <div class="market-info">
+                                <div class="question">Ethereum above $5K by EOY?</div>
+                                <div class="category">Category: <span class="category-badge badge-crypto">Crypto</span></div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">YES</div>
+                                <div class="metric-value">38%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">NO</div>
+                                <div class="metric-value">62%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Volume</div>
+                                <div class="metric-value">$1.5M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Liquidity</div>
+                                <div class="metric-value">$890K</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Spread</div>
+                                <div class="metric-value">2.8%</div>
+                            </div>
+                        </div>
+
+                        <div class="market-row" data-category="sports">
+                            <div class="market-info">
+                                <div class="question">Super Bowl winner: Chiefs or 49ers?</div>
+                                <div class="category">Category: <span class="category-badge badge-sports">Sports</span></div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">YES</div>
+                                <div class="metric-value">55%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">NO</div>
+                                <div class="metric-value">45%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Volume</div>
+                                <div class="metric-value">$4.2M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Liquidity</div>
+                                <div class="metric-value">$2.8M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Spread</div>
+                                <div class="metric-value">1.2%</div>
+                            </div>
+                        </div>
+
+                        <div class="market-row" data-category="politics">
+                            <div class="market-info">
+                                <div class="question">Will the Fed cut rates in 2026?</div>
+                                <div class="category">Category: <span class="category-badge badge-politics">Politics</span></div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">YES</div>
+                                <div class="metric-value">71%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">NO</div>
+                                <div class="metric-value">29%</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Volume</div>
+                                <div class="metric-value">$5.1M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Liquidity</div>
+                                <div class="metric-value">$3.5M</div>
+                            </div>
+                            <div class="market-metric">
+                                <div class="metric-label">Spread</div>
+                                <div class="metric-value">0.8%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="export-btn">📥 Export to CSV</button>
+                </div>
+
+                <div id="mock" class="tab-content">
+                    <div class="section-header">
+                        <h2>Mock Data (Backtesting)</h2>
+                        <p>Simulated market data for strategy validation</p>
+                    </div>
+
+                    <div class="info-box">
+                        💡 Mock data will be populated when backtesting scenarios are run. This tab allows you to:
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Test trading strategies against simulated scenarios</li>
+                            <li>Validate edge calculations without risking capital</li>
+                            <li>Compare strategy performance before live trading</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="resolved" class="tab-content">
+                    <div class="section-header">
+                        <h2>Resolved Results</h2>
+                        <p>Historical market outcomes for accuracy analysis</p>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="label">Resolved Markets</div>
+                            <div class="value">123</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">YES Outcomes</div>
+                            <div class="value">73</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">NO Outcomes</div>
+                            <div class="value">50</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">Avg Resolution</div>
+                            <div class="value">58%</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        📅 Resolved markets appear here as markets settle. Track your historical performance and improve your strategies.
+                    </div>
+                </div>
+
+                <div id="analytics" class="tab-content">
+                    <div class="section-header">
+                        <h2>Analytics Dashboard</h2>
+                        <p>Performance metrics and insights</p>
+                    </div>
+
+                    <div class="info-box">
+                        📊 Signal Performance by Confidence Level:
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>80%+ Confidence: <strong>72% win rate</strong></li>
+                            <li>70-79% Confidence: <strong>65% win rate</strong></li>
+                            <li>60-69% Confidence: <strong>58% win rate</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="label">Best Category</div>
+                            <div class="value">Crypto</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">Best ROI</div>
+                            <div class="value">+12.4%</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">Total Signals</div>
+                            <div class="value">247</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="label">Active Markets</div>
+                            <div class="value">10</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div class="footer">
+            <p><strong>Polymarket Analytics Platform - Demo Version</strong></p>
+            <p>Built with FastAPI, PostgreSQL + TimescaleDB, and Streamlit</p>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        // Category filter
+        const categoryFilter = document.getElementById('categoryFilter');
+        const marketRows = document.querySelectorAll('.market-row');
+
+        categoryFilter.addEventListener('change', (e) => {
+            const category = e.target.value;
+
+            marketRows.forEach(row => {
+                if (category === 'all' || row.dataset.category === category) {
+                    row.style.display = 'grid';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Export button
+        const exportBtn = document.querySelector('.export-btn');
+        exportBtn.addEventListener('click', () => {
+            alert('CSV export functionality - In the full version, this exports filtered market data to CSV file.');
+        });
+    </script>
+</body>
+</html>

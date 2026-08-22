@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: timescale/timescaledb:latest-pg16
+    container_name: polymarket-postgres
+    environment:
+      POSTGRES_DB: polymarket
+      POSTGRES_USER: polymarket
+      POSTGRES_PASSWORD: polymarket_dev_password_change_me
+      TZ: UTC
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U polymarket"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - polymarket-network
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: polymarket-backend
+    environment:
+      DATABASE_URL: postgresql://polymarket:polymarket_dev_password_change_me@postgres:5432/polymarket
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: polymarket
+      DB_PASSWORD: polymarket_dev_password_change_me
+      DB_NAME: polymarket
+      GAMMA_API_URL: https://gamma-api.polymarket.com
+      CLOB_API_URL: https://clob.polymarket.com
+      WS_URL: wss://api.polymarket.us/v1/ws/markets
+      TZ: UTC
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ../backend:/app
+      - backend_logs:/app/logs
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - polymarket-network
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: polymarket-frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+      TZ: UTC
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    volumes:
+      - ../frontend:/app
+    command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0 --server.enableCORS=false
+    networks:
+      - polymarket-network
+
+volumes:
+  postgres_data:
+  backend_logs:
+
+networks:
+  polymarket-network:
+    driver: bridge
